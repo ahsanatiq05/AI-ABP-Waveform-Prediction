@@ -72,7 +72,7 @@ The model was trained using **Mixed Precision (Float16)** on a T4 GPU. We utiliz
 
 ---
 ## 📉 Limitaions
-The neural network is trained on very limited GPU where the hyperparameter tuning was not aplicable.
+The neural network is trained on very limited GPU where the hyperparameter tuning was not applicable.
 
 ---
 ## 🏆 Final Results Table
