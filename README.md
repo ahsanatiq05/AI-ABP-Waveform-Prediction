@@ -35,22 +35,28 @@ We utilized a sophisticated Hybrid Deep Learning architecture designed to captur
 
 ---
 
-## 📊 Comparative Analysis
-We benchmarked the Deep Learning model against traditional ML approaches to justify the computational cost.
+## 📊 Comparative Analysis & Model Details
+We benchmarked the Deep Learning model against traditional ML approaches to demonstrate why advanced architecture is necessary for physiological signals.
 
-### 1. Baseline: Linear Regression
-* **Result:** MAE ~13.11 mmHg.
-* **Verdict:** Too simple. Failed to capture non-linearities in blood pressure dynamics.
+### 1. Linear Regression (The Baseline)
+We implemented Linear Regression to establish a baseline and test for linear relationships between the input features (PPG/ECG magnitude) and the target BP.
+* **Mechanism:** Fits a straight line minimizing the residual sum of squares between observed and predicted targets.
+* **Limitation:** It treats every time step independently and fails to capture the complex, non-linear hemodynamics of blood flow.
+* **Result:** **MAE ~13.11 mmHg**. The prediction was flat and failed to represent the waveform structure.
 ![Linear Regression](Images/Linear%20Regression%20Evaluation%20Graph.png)
 
-### 2. Baseline: Decision Tree Regressor
-* **Result:** MAE ~16.50 mmHg.
-* **Verdict:** Resulted in a "jagged" and low-resolution prediction. Unable to model smooth physiological curves.
+### 2. Decision Tree Regressor
+We utilized Decision Trees to capture non-linear relationships by splitting data based on feature thresholds.
+* **Mechanism:** Learns simple decision rules inferred from the data features.
+* **Limitation:** While it captured some peaks better than Linear Regression, it suffers from a lack of "temporal smoothness." The output was **jagged and discontinuous**, making it unsuitable for medical waveform analysis.
+* **Result:** **MAE ~16.50 mmHg**.
 ![Decision Tree](Images/Decision%20Tree%20Evaluation%20Graph.png)
 
 ### 3. The Winner: Bi-Directional LSTM (Deep Learning)
-* **Result:** **MAE 3.42 mmHg**.
-* **Verdict:** Successfully reconstructed the full waveform, capturing Systolic peaks and Diastolic valleys with high precision.
+We developed a Hybrid CNN-BiLSTM model to address the limitations of the baselines.
+* **Mechanism:** The CNN layers act as feature extractors (identifying morphological shapes like the dicrotic notch), while the Bi-Directional LSTMs process the sequence in both forward and backward directions to understand context.
+* **Advantage:** Unlike the baselines, this model understands that a BP value at time $t$ is dependent on $t-1$ and $t+1$.
+* **Result:** **MAE 3.42 mmHg**. Successfully reconstructed the full waveform with high precision.
 ![Final LSTM Result](Images/LSTM%20Evaluation%20Graph.png)
 
 ---
@@ -65,7 +71,10 @@ The model was trained using **Mixed Precision (Float16)** on a T4 GPU. We utiliz
 ![Training Graphs](Images/Training%20Graphs.png)
 
 ---
+## 📉 Limitaions
+The neural network is trained on very limited GPU where the hyperparameter tuning was not aplicable.
 
+---
 ## 🏆 Final Results Table
 
 | Model | MAE (Error) | RMSE | Status |
@@ -100,4 +109,4 @@ The model was trained using **Mixed Precision (Float16)** on a T4 GPU. We utiliz
 * **Contact:** [LinkedIn Profile](https://www.linkedin.com/in/ahsan-atiq-913219263/)
 
 ---
-*Note: This project is for research and educational purposes. While the results are clinical-grade, it should not replace certified medical devices without clinical trials.*
+*Note: This project is for research and educational purposes.*
